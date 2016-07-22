@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport"
+          content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi"/>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script type="text/javascript" src="js/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <title>Gaming Realms - Test Interview</title>
+</head>
+<body>
+<div class="testing">
+
+    <div class="testing-safe">
+
+        <nav class="navbar navbar-default" role="navigation">
+            <a class="navbar-brand">Gaming Realms - Interview Test Page</a>
+        </nav>
+
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4>Launch Game</h4></div>
+            <div class="panel-body">
+
+                <div class="form-group">
+                    <button id="openGameButton" class="btn btn-primary">Open Game</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="application/javascript">
+
+    var openGameButton = $("#openGameButton");
+
+    openGameButton.click(function () {
+        openGame(false);
+    });
+
+    function openGame() {
+        var windowFeatures = 'width=300,height=350';
+        var url = "game.html";
+        window.open(url, "Game", windowFeatures);
+    }
+
+</script>
+</body>
+</html>
+
