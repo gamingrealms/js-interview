@@ -45,15 +45,12 @@ class PlayerShip extends AbstractView {
     }
 
     private handleMouseMove(event:PIXI.interaction.InteractionEvent):void {
-
-        Logger.debug("Handle Mouse Move");
-
         var data:PIXI.interaction.InteractionData = event.data;
         this.ship.position = new PIXI.Point(data.global.x, this.ship.position.y);
     }
 
     private handleEnemyBulletMove(event:EnemyBulletEvent):void {
-        if (GraphicsUtil.isInBounds(this.ship, event.getBullet().getSprite())) {
+        if (BoundsUtil.isInBounds(this.ship, event.getBullet().getSprite())) {
             this.dispose();
         }
     }

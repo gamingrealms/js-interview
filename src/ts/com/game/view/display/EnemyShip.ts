@@ -58,7 +58,7 @@ class EnemyShip extends AbstractView {
     }
 
     private handlePlayerBullet(event:PlayerBulletEvent):void {
-        if (GraphicsUtil.isInBounds(this.ship, event.getBullet().getSprite())) {
+        if (BoundsUtil.isInBounds(this.ship, event.getBullet().getSprite())) {
             this.dispose();
         }
     }

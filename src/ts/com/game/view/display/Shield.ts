@@ -54,7 +54,7 @@ class Shield extends AbstractView {
     private checkBlockBounds(bullet:PIXI.Sprite):PIXI.Sprite {
         for (var i:number = 0; i < this.blocks.length; i++) {
             var block:PIXI.Sprite = this.blocks[i];
-            if (block.visible && GraphicsUtil.isInBounds(block, bullet)) {
+            if (block.visible && BoundsUtil.isInBounds(block, bullet)) {
                 return block;
             }
         }

@@ -354,7 +354,7 @@ var EnemyShip = (function (_super) {
         new EnemyBullet(this.ship.position.clone()).fire();
     };
     EnemyShip.prototype.handlePlayerBullet = function (event) {
-        if (GraphicsUtil.isInBounds(this.ship, event.getBullet().getSprite())) {
+        if (BoundsUtil.isInBounds(this.ship, event.getBullet().getSprite())) {
             this.dispose();
         }
     };
@@ -454,12 +454,11 @@ var PlayerShip = (function (_super) {
         new PlayerBullet(bulletPosition).fire();
     };
     PlayerShip.prototype.handleMouseMove = function (event) {
-        Logger.debug("Handle Mouse Move");
         var data = event.data;
         this.ship.position = new PIXI.Point(data.global.x, this.ship.position.y);
     };
     PlayerShip.prototype.handleEnemyBulletMove = function (event) {
-        if (GraphicsUtil.isInBounds(this.ship, event.getBullet().getSprite())) {
+        if (BoundsUtil.isInBounds(this.ship, event.getBullet().getSprite())) {
             this.dispose();
         }
     };
@@ -535,7 +534,7 @@ var Shield = (function (_super) {
     Shield.prototype.checkBlockBounds = function (bullet) {
         for (var i = 0; i < this.blocks.length; i++) {
             var block = this.blocks[i];
-            if (block.visible && GraphicsUtil.isInBounds(block, bullet)) {
+            if (block.visible && BoundsUtil.isInBounds(block, bullet)) {
                 return block;
             }
         }
@@ -626,6 +625,20 @@ var Style = (function () {
     Style.SHIELD = "Shield";
     Style.map = new Dictionary();
     return Style;
+})();
+var BoundsUtil = (function () {
+    function BoundsUtil() {
+    }
+    BoundsUtil.isInBounds = function (a, b) {
+        var aPoint = GraphicsUtil.globalPosition(a);
+        var bPoint = GraphicsUtil.globalPosition(b);
+        var rectangle = new PIXI.Rectangle(aPoint.x, aPoint.y);
+        return rectangle.contains(bPoint.x, bPoint.y);
+    };
+    BoundsUtil.globalPosition = function (object) {
+        return new PIXI.Point(object.worldTransform.tx, object.worldTransform.ty);
+    };
+    return BoundsUtil;
 })();
 var Loader = (function (_super) {
     __extends(Loader, _super);
@@ -743,6 +756,7 @@ var ConfigRequest = (function (_super) {
 /// <reference path="../ts/com/game/view/event/PlayerShipEvent.ts" />
 /// <reference path="../ts/com/game/view/style/Font.ts" />
 /// <reference path="../ts/com/game/view/style/Style.ts" />
+/// <reference path="../ts/com/game/view/util/BoundsUtil.ts" />
 /// <reference path="../ts/com/loading/Loader.ts" />
 /// <reference path="../ts/com/loading/data/ConfigData.ts" />
 /// <reference path="../ts/com/loading/request/ConfigRequest.ts" />

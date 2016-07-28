@@ -25,6 +25,7 @@
 /// <reference path="../ts/com/game/view/event/PlayerShipEvent.ts" />
 /// <reference path="../ts/com/game/view/style/Font.ts" />
 /// <reference path="../ts/com/game/view/style/Style.ts" />
+/// <reference path="../ts/com/game/view/util/BoundsUtil.ts" />
 /// <reference path="../ts/com/loading/Loader.ts" />
 /// <reference path="../ts/com/loading/data/ConfigData.ts" />
 /// <reference path="../ts/com/loading/request/ConfigRequest.ts" />
