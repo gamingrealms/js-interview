@@ -17,8 +17,8 @@ class GameView extends AbstractView {
     private gameName:PIXI.extras.BitmapText;
 
     constructor(model:GameModel) {
-        this.model = model;
         super();
+        this.model = model;
     }
 
     public create():void {
