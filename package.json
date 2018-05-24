@@ -10,7 +10,6 @@
         "grunt-contrib-copy": "latest",
         "grunt-contrib-concat": "latest",
         "grunt-contrib-uglify": "latest",
-        "grunt-contrib-concat": "latest",
         "grunt-text-replace": "latest",
         "grunt-phonegap": "latest"
     }

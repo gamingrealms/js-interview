@@ -5,3 +5,4 @@ tscommand*.txt
 .tscache
 build
 bin
+package-lock.json
