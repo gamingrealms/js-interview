@@ -4,10 +4,10 @@
     <NumLives>3</NumLives>
     <EnemySpeed>40</EnemySpeed>
     <Files>
+        <SpriteSheet id="EnemyShip" url="img/enemyship.json" frames="20"/>
         <PNG id="PlayerBullet" url="img/playerbullet.png"/>
         <PNG id="PlayerShip" url="img/playership.png"/>
         <PNG id="Shield" url="img/shield.png"/>
-        <SpriteSheet id="EnemyShip" url="img/enemyship.json" frames="20"/>
         <PNG id="EnemyBullet" url="img/enemybullet.png"/>
         <Font id="Helvetica" url="img/helvetica.fnt"/>
     </Files>
