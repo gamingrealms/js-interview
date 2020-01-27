@@ -8,7 +8,7 @@ class PlayerShip extends AbstractView {
     }
 
     private createShip(): void {
-        this.ship = AssetManager.getSprite(AssetManager.PLAYER_SHIP);
+        this.ship = AssetManager.getSprite(Asset.PLAYER_SHIP);
         this.ship.interactive = true;
         this.addChild(this.ship);
         this.ship.position = new PIXI.Point(125, this.renderer.getGameSize().y - (this.renderer.getGameSize().y / 8));

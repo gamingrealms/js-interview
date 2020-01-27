@@ -28,7 +28,7 @@ class EnemyShip extends AbstractView {
     }
 
     private createShip():void {
-        this.ship = AssetManager.getMovieClip(AssetManager.ENEMY_SHIP);
+        this.ship = AssetManager.getMovieClip(Asset.ENEMY_SHIP);
         this.ship.play();
         this.addChild(this.ship);
     }

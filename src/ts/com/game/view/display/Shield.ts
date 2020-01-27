@@ -28,7 +28,7 @@ class Shield extends AbstractView {
     }
 
     private createBlock(x:number, y:number):PIXI.Sprite {
-        let block:PIXI.Sprite = AssetManager.getSprite(AssetManager.SHIELD);
+        let block:PIXI.Sprite = AssetManager.getSprite(Asset.SHIELD);
         block.position = new PIXI.Point(x * block.width, y * block.height);
         return block;
     }

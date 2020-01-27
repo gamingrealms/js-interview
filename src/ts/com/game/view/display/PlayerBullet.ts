@@ -20,7 +20,7 @@ class PlayerBullet extends AbstractView {
     }
 
     private createBullet():void {
-        this.sprite = AssetManager.getSprite(AssetManager.PLAYER_BULLET);
+        this.sprite = AssetManager.getSprite(Asset.PLAYER_BULLET);
         this.addChild(this.sprite);
     }
 

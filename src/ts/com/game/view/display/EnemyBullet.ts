@@ -20,7 +20,7 @@ class EnemyBullet extends AbstractView {
     }
 
     private createBullet():void {
-        this.sprite = AssetManager.getSprite(AssetManager.ENEMY_BULLET);
+        this.sprite = AssetManager.getSprite(Asset.ENEMY_BULLET);
         this.addChild(this.sprite);
     }
 

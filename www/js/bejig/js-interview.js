@@ -194,7 +194,7 @@ var EnemyBullet = (function (_super) {
         }
     };
     EnemyBullet.prototype.createBullet = function () {
-        this.sprite = AssetManager.getSprite(AssetManager.ENEMY_BULLET);
+        this.sprite = AssetManager.getSprite(Asset.ENEMY_BULLET);
         this.addChild(this.sprite);
     };
     EnemyBullet.prototype.fire = function () {
@@ -242,7 +242,7 @@ var EnemyShip = (function (_super) {
         this.listenGame(PlayerBulletEvent.MOVE, this.handlePlayerBullet, this);
     };
     EnemyShip.prototype.createShip = function () {
-        this.ship = AssetManager.getMovieClip(AssetManager.ENEMY_SHIP);
+        this.ship = AssetManager.getMovieClip(Asset.ENEMY_SHIP);
         this.ship.play();
         this.addChild(this.ship);
     };
@@ -302,7 +302,7 @@ var PlayerBullet = (function (_super) {
         }
     };
     PlayerBullet.prototype.createBullet = function () {
-        this.sprite = AssetManager.getSprite(AssetManager.PLAYER_BULLET);
+        this.sprite = AssetManager.getSprite(Asset.PLAYER_BULLET);
         this.addChild(this.sprite);
     };
     PlayerBullet.prototype.fire = function () {
@@ -335,7 +335,7 @@ var PlayerShip = (function (_super) {
         this.createShip();
     };
     PlayerShip.prototype.createShip = function () {
-        this.ship = AssetManager.getSprite(AssetManager.PLAYER_SHIP);
+        this.ship = AssetManager.getSprite(Asset.PLAYER_SHIP);
         this.ship.interactive = true;
         this.addChild(this.ship);
         this.ship.position = new PIXI.Point(125, this.renderer.getGameSize().y - (this.renderer.getGameSize().y / 8));
@@ -424,7 +424,7 @@ var Shield = (function (_super) {
         }
     };
     Shield.prototype.createBlock = function (x, y) {
-        var block = AssetManager.getSprite(AssetManager.SHIELD);
+        var block = AssetManager.getSprite(Asset.SHIELD);
         block.position = new PIXI.Point(x * block.width, y * block.height);
         return block;
     };
@@ -593,6 +593,16 @@ var GameView = (function (_super) {
     };
     return GameView;
 }(AbstractView));
+var Asset = (function () {
+    function Asset() {
+    }
+    Asset.PLAYER_SHIP = "PlayerShip";
+    Asset.PLAYER_BULLET = "PlayerBullet";
+    Asset.ENEMY_SHIP = "EnemyShip";
+    Asset.ENEMY_BULLET = "EnemyBullet";
+    Asset.SHIELD = "Shield";
+    return Asset;
+}());
 var Font = (function () {
     function Font() {
     }
@@ -628,11 +638,6 @@ var AssetManager = (function () {
         }
         return r;
     };
-    AssetManager.PLAYER_SHIP = "PlayerShip";
-    AssetManager.PLAYER_BULLET = "PlayerBullet";
-    AssetManager.ENEMY_SHIP = "EnemyShip";
-    AssetManager.ENEMY_BULLET = "EnemyBullet";
-    AssetManager.SHIELD = "Shield";
     AssetManager.map = new Dictionary();
     return AssetManager;
 }());

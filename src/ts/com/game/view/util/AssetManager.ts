@@ -1,11 +1,5 @@
 class AssetManager {
 
-    public static PLAYER_SHIP:string = "PlayerShip";
-    public static PLAYER_BULLET:string = "PlayerBullet";
-    public static ENEMY_SHIP:string = "EnemyShip";
-    public static ENEMY_BULLET:string = "EnemyBullet";
-    public static SHIELD:string = "Shield";
-
     private static map:Dictionary<string,string> = new Dictionary<string, string>();
 
     public static addPath(filePath:FilePath):void {
