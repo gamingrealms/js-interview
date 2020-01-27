@@ -36,7 +36,7 @@ class PlayerBullet extends AbstractView {
     }
 
     private handleTweenUpdate() {
-        this.dispatch(new PlayerBulletEvent(this));
+        this.dispatchGame(new PlayerBulletEvent(this));
     }
 
     private handleTweenComplete() {

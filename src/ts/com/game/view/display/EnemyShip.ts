@@ -19,12 +19,12 @@ class EnemyShip extends AbstractView {
         }
         this.moveTimer.removeEventListener(TimerEvent.TIMER, this);
         this.fireTimer.removeEventListener(TimerEvent.TIMER, this);
-        this.remove(PlayerBulletEvent.MOVE, this);
-        this.dispatch(new EnemyShipEvent());
+        this.removeGame(PlayerBulletEvent.MOVE, this);
+        this.dispatchGame(new EnemyShipEvent());
     }
 
     public addEventListeners():void {
-        this.listen(PlayerBulletEvent.MOVE, this.handlePlayerBullet, this);
+        this.listenGame(PlayerBulletEvent.MOVE, this.handlePlayerBullet, this);
     }
 
     private createShip():void {

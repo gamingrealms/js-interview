@@ -10,19 +10,19 @@ class Loader extends EventDispatcher {
     }
 
     public load():void {
-        var request:ConfigRequest = new ConfigRequest(this.url);
+        let request:ConfigRequest = new ConfigRequest(this.url);
         request.addEventListener(EventType.COMPLETE, this.handleConfigComplete, this);
         request.load();
     }
 
     private handleConfigComplete(event:EventObject) {
-        var request:ConfigRequest = event.currentTarget;
+        let request:ConfigRequest = event.currentTarget;
         this.config = request.getConfig();
-        var files:Dictionary<string, FilePath> = request.getConfig().getFiles();
-        var values:FilePath [] = files.getValues();
-        var filesToLoad:string [] = [];
-        var filePath:FilePath;
-        for (var i:number = 0; i < values.length; i++) {
+        let files:Dictionary<string, FilePath> = request.getConfig().getFiles();
+        let values:FilePath [] = files.getValues();
+        let filesToLoad:string [] = [];
+        let filePath:FilePath;
+        for (let i:number = 0; i < values.length; i++) {
             filePath = values[i];
             filesToLoad.push(filePath.url);
             AssetManager.addPath(filePath);

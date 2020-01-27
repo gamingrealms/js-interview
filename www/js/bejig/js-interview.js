@@ -162,13 +162,13 @@ var AbstractView = (function (_super) {
     AbstractView.prototype.createEventBus = function () {
         this.eventBus = EventBus.getInstance();
     };
-    AbstractView.prototype.listen = function (type, handler, scope) {
+    AbstractView.prototype.listenGame = function (type, handler, scope) {
         this.eventBus.addEventListener(type, handler, scope);
     };
-    AbstractView.prototype.remove = function (type, scope) {
+    AbstractView.prototype.removeGame = function (type, scope) {
         this.eventBus.removeEventListener(type, scope);
     };
-    AbstractView.prototype.dispatch = function (event) {
+    AbstractView.prototype.dispatchGame = function (event) {
         this.eventBus.dispatchEvent(event);
     };
     AbstractView.prototype.addEventListeners = function () {
@@ -207,7 +207,7 @@ var EnemyBullet = (function (_super) {
         });
     };
     EnemyBullet.prototype.handleTweenUpdate = function () {
-        this.dispatch(new EnemyBulletEvent(this));
+        this.dispatchGame(new EnemyBulletEvent(this));
     };
     EnemyBullet.prototype.handleTweenComplete = function () {
         this.dispose();
@@ -235,11 +235,11 @@ var EnemyShip = (function (_super) {
         }
         this.moveTimer.removeEventListener(TimerEvent.TIMER, this);
         this.fireTimer.removeEventListener(TimerEvent.TIMER, this);
-        this.remove(PlayerBulletEvent.MOVE, this);
-        this.dispatch(new EnemyShipEvent());
+        this.removeGame(PlayerBulletEvent.MOVE, this);
+        this.dispatchGame(new EnemyShipEvent());
     };
     EnemyShip.prototype.addEventListeners = function () {
-        this.listen(PlayerBulletEvent.MOVE, this.handlePlayerBullet, this);
+        this.listenGame(PlayerBulletEvent.MOVE, this.handlePlayerBullet, this);
     };
     EnemyShip.prototype.createShip = function () {
         this.ship = AssetManager.getMovieClip(AssetManager.ENEMY_SHIP);
@@ -315,7 +315,7 @@ var PlayerBullet = (function (_super) {
         });
     };
     PlayerBullet.prototype.handleTweenUpdate = function () {
-        this.dispatch(new PlayerBulletEvent(this));
+        this.dispatchGame(new PlayerBulletEvent(this));
     };
     PlayerBullet.prototype.handleTweenComplete = function () {
         this.dispose();
@@ -345,20 +345,20 @@ var PlayerShip = (function (_super) {
             this.removeChild(this.ship);
         }
         this.removeEventListeners();
-        this.dispatch(new PlayerShipEvent());
+        this.dispatchGame(new PlayerShipEvent());
     };
     PlayerShip.prototype.addEventListeners = function () {
         var stage = this.renderer.getStage();
         MouseUtil.setInteractive(stage, true);
         MouseUtil.addMouseMove(stage, this.handleMouseMove, this);
         MouseUtil.addMouseDown(stage, this.handleMouseDown, this);
-        this.listen(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
+        this.listenGame(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
     };
     PlayerShip.prototype.removeEventListeners = function () {
         var stage = this.renderer.getStage();
         MouseUtil.removeMouseMove(stage, this.handleMouseMove);
         MouseUtil.removeMouseDown(stage, this.handleMouseDown);
-        this.remove(EnemyBulletEvent.MOVE, this);
+        this.removeGame(EnemyBulletEvent.MOVE, this);
     };
     PlayerShip.prototype.handleMouseDown = function () {
         var x = this.ship.position.x + (this.ship.width / 2);
@@ -394,7 +394,7 @@ var PlayerShip = (function (_super) {
     };
     PlayerShip.prototype.handleFlashTimerComplete = function (event) {
         this.ship.visible = true;
-        this.listen(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
+        this.listenGame(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
     };
     return PlayerShip;
 }(AbstractView));
@@ -408,8 +408,8 @@ var Shield = (function (_super) {
         this.createBlocks();
     };
     Shield.prototype.addEventListeners = function () {
-        this.listen(PlayerBulletEvent.MOVE, this.handlePlayerBulletMove, this);
-        this.listen(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
+        this.listenGame(PlayerBulletEvent.MOVE, this.handlePlayerBulletMove, this);
+        this.listenGame(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
     };
     Shield.prototype.createBlocks = function () {
         this.blocks = [];
@@ -512,8 +512,8 @@ var GameView = (function (_super) {
         this.createFields();
     };
     GameView.prototype.addEventListeners = function () {
-        this.listen(PlayerLivesUpdatedEvent.UPDATED, this.handlePlayerLivesUpdate, this);
-        this.listen(PlayerScoreUpdatedEvent.UPDATED, this.handlePlayerScoreUpdate, this);
+        this.listenGame(PlayerLivesUpdatedEvent.UPDATED, this.handlePlayerLivesUpdate, this);
+        this.listenGame(PlayerScoreUpdatedEvent.UPDATED, this.handlePlayerScoreUpdate, this);
     };
     GameView.prototype.createBackground = function () {
         this.background = GraphicsUtil.createRectangle(this.renderer.getGameSize());

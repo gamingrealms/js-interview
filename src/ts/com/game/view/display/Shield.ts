@@ -10,8 +10,8 @@ class Shield extends AbstractView {
     }
 
     public addEventListeners():void {
-        this.listen(PlayerBulletEvent.MOVE, this.handlePlayerBulletMove, this);
-        this.listen(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
+        this.listenGame(PlayerBulletEvent.MOVE, this.handlePlayerBulletMove, this);
+        this.listenGame(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
     }
 
     private createBlocks():void {

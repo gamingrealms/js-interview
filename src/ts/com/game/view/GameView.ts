@@ -28,8 +28,8 @@ class GameView extends AbstractView {
     }
 
     public addEventListeners():void {
-        this.listen(PlayerLivesUpdatedEvent.UPDATED, this.handlePlayerLivesUpdate, this);
-        this.listen(PlayerScoreUpdatedEvent.UPDATED, this.handlePlayerScoreUpdate, this);
+        this.listenGame(PlayerLivesUpdatedEvent.UPDATED, this.handlePlayerLivesUpdate, this);
+        this.listenGame(PlayerScoreUpdatedEvent.UPDATED, this.handlePlayerScoreUpdate, this);
     }
 
     private createBackground():void {

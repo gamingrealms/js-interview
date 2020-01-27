@@ -24,15 +24,15 @@ class AbstractView extends PIXI.Container {
         this.eventBus = EventBus.getInstance();
     }
 
-    public listen(type: string, handler: Function, scope: Object): void {
+    public listenGame(type: string, handler: Function, scope: Object): void {
         this.eventBus.addEventListener(type, handler, scope);
     }
 
-    public remove(type: string, scope: Object): void {
+    public removeGame(type: string, scope: Object): void {
         this.eventBus.removeEventListener(type, scope);
     }
 
-    public dispatch(event: EventObject): void {
+    public dispatchGame(event: EventObject): void {
         this.eventBus.dispatchEvent(event);
     }
 

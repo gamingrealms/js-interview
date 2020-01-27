@@ -19,15 +19,15 @@ class ConfigData {
 
     private processFiles() {
         this.files = new Dictionary<string, FilePath>();
-        var fileQuery:JQuery = $(this.document).find("Files");
-        var files:JQuery = fileQuery.children();
+        let fileQuery:JQuery = $(this.document).find("Files");
+        let files:JQuery = fileQuery.children();
         files.each(ObjectUtil.delegate(this.processFile, this));
     }
 
     private processFile(index:any, element:Element):void {
-        var type:string = element.nodeName;
-        var id:string = element.getAttribute("id");
-        var filePath:FilePath = ObjectUtil.reflect(window, type + FilePath.PREFIX, element);
+        let type:string = element.nodeName;
+        let id:string = element.getAttribute("id");
+        let filePath:FilePath = ObjectUtil.reflect(window, type + FilePath.PREFIX, element);
         this.files.setValue(id, filePath);
     }
 

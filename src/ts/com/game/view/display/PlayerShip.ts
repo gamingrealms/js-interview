@@ -19,7 +19,7 @@ class PlayerShip extends AbstractView {
             this.removeChild(this.ship);
         }
         this.removeEventListeners();
-        this.dispatch(new PlayerShipEvent());
+        this.dispatchGame(new PlayerShipEvent());
     }
 
     public addEventListeners(): void {
@@ -27,14 +27,14 @@ class PlayerShip extends AbstractView {
         MouseUtil.setInteractive(stage, true);
         MouseUtil.addMouseMove(stage, this.handleMouseMove, this);
         MouseUtil.addMouseDown(stage, this.handleMouseDown, this);
-        this.listen(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
+        this.listenGame(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
     }
 
     public removeEventListeners(): void {
         let stage: PIXI.Container = this.renderer.getStage();
         MouseUtil.removeMouseMove(stage, this.handleMouseMove);
         MouseUtil.removeMouseDown(stage, this.handleMouseDown);
-        this.remove(EnemyBulletEvent.MOVE, this);
+        this.removeGame(EnemyBulletEvent.MOVE, this);
     }
 
     private handleMouseDown(): void {
@@ -77,6 +77,6 @@ class PlayerShip extends AbstractView {
 
     private handleFlashTimerComplete(event: TimerEvent): void {
         this.ship.visible = true;
-        this.listen(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
+        this.listenGame(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
     }
 }

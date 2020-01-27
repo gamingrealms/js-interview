@@ -36,7 +36,7 @@ class EnemyBullet extends AbstractView {
     }
 
     private handleTweenUpdate() {
-        this.dispatch(new EnemyBulletEvent(this));
+        this.dispatchGame(new EnemyBulletEvent(this));
     }
 
     private handleTweenComplete() {
