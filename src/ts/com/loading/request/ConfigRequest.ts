@@ -9,7 +9,7 @@ class ConfigRequest extends EventDispatcher {
     }
 
     public load():void {
-        $.get(this.url, null, ObjectUtil.delegate(this.handleConfigComplete, this), "xml");
+        $.get(this.url, null, this.handleConfigComplete.bind(this), "xml");
     }
 
     private handleConfigComplete(document:Document) {

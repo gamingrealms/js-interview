@@ -310,8 +310,10 @@ var PlayerBullet = (function (_super) {
         this.tween = TweenMax.to(this.sprite.position, 1, {
             y: 0,
             ease: Linear.easeNone,
-            onUpdate: ObjectUtil.delegate(this.handleTweenUpdate, this),
-            onComplete: ObjectUtil.delegate(this.handleTweenComplete, this)
+            onUpdate: this.handleTweenUpdate,
+            onUpdateScope: this,
+            onComplete: this.handleTweenComplete,
+            onCompleteScope: this
         });
     };
     PlayerBullet.prototype.handleTweenUpdate = function () {
@@ -668,7 +670,7 @@ var ConfigData = (function () {
         this.files = new Dictionary();
         var fileQuery = $(this.document).find("Files");
         var files = fileQuery.children();
-        files.each(ObjectUtil.delegate(this.processFile, this));
+        files.each(this.processFile.bind(this));
     };
     ConfigData.prototype.processFile = function (index, element) {
         var type = element.nodeName;
@@ -719,7 +721,7 @@ var Loader = (function (_super) {
         }
         this.loader = new PIXI.loaders.Loader();
         this.loader.add(filesToLoad);
-        this.loader.once("complete", ObjectUtil.delegate(this.handleFilesComplete, this));
+        this.loader.once("complete", this.handleFilesComplete.bind(this));
         this.loader.load();
     };
     Loader.prototype.handleFilesComplete = function () {
@@ -738,7 +740,7 @@ var ConfigRequest = (function (_super) {
         return _this;
     }
     ConfigRequest.prototype.load = function () {
-        $.get(this.url, null, ObjectUtil.delegate(this.handleConfigComplete, this), "xml");
+        $.get(this.url, null, this.handleConfigComplete.bind(this), "xml");
     };
     ConfigRequest.prototype.handleConfigComplete = function (document) {
         this.config = new ConfigData(document);

@@ -21,7 +21,7 @@ class ConfigData {
         this.files = new Dictionary<string, FilePath>();
         let fileQuery:JQuery = $(this.document).find("Files");
         let files:JQuery = fileQuery.children();
-        files.each(ObjectUtil.delegate(this.processFile, this));
+        files.each(this.processFile.bind(this));
     }
 
     private processFile(index:any, element:Element):void {

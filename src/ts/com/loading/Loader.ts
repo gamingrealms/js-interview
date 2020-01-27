@@ -29,7 +29,7 @@ class Loader extends EventDispatcher {
         }
         this.loader = new PIXI.loaders.Loader();
         this.loader.add(filesToLoad);
-        this.loader.once("complete", ObjectUtil.delegate(this.handleFilesComplete, this));
+        this.loader.once("complete", this.handleFilesComplete.bind(this));
         this.loader.load();
     }
 

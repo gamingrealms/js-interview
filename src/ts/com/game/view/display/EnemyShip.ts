@@ -73,5 +73,4 @@ class EnemyShip extends AbstractView {
         let y:number = Math.random() * (this.renderer.getGameSize().y - this.ship.height - 150);
         return new PIXI.Point(x, y);
     }
-
 }

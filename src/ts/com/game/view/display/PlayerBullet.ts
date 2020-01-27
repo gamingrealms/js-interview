@@ -30,8 +30,10 @@ class PlayerBullet extends AbstractView {
             {
                 y: 0,
                 ease: Linear.easeNone,
-                onUpdate: ObjectUtil.delegate(this.handleTweenUpdate, this),
-                onComplete: ObjectUtil.delegate(this.handleTweenComplete, this)
+                onUpdate: this.handleTweenUpdate,
+                onUpdateScope: this,
+                onComplete: this.handleTweenComplete,
+                onCompleteScope: this
             });
     }
 
