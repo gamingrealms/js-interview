@@ -28,7 +28,7 @@ class EnemyShip extends AbstractView {
     }
 
     private createShip():void {
-        this.ship = Style.getMovieClip(Style.ENEMY_SHIP);
+        this.ship = AssetManager.getMovieClip(AssetManager.ENEMY_SHIP);
         this.ship.play();
         this.addChild(this.ship);
     }
@@ -54,7 +54,7 @@ class EnemyShip extends AbstractView {
     }
 
     private handleFireTimeUpdate(event:TimerEvent):void {
-        new EnemyBullet(this.ship.position.clone()).fire();
+        new EnemyBullet(this.model, this.ship.position.clone()).fire();
     }
 
     private handlePlayerBullet(event:PlayerBulletEvent):void {
@@ -69,8 +69,8 @@ class EnemyShip extends AbstractView {
     }
 
     private get randomPoint():PIXI.Point {
-        var x:number = Math.random() * (this.renderer.getGameSize().x - this.ship.width);
-        var y:number = Math.random() * (this.renderer.getGameSize().y - this.ship.height - 150);
+        let x:number = Math.random() * (this.renderer.getGameSize().x - this.ship.width);
+        let y:number = Math.random() * (this.renderer.getGameSize().y - this.ship.height - 150);
         return new PIXI.Point(x, y);
     }
 

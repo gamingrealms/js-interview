@@ -2,8 +2,9 @@
     "company": "bejig",
     "name": "js-interview",
     "devDependencies": {
-        "grunt": "~0.4.0",
-        "grunt-ts": "5.2.0",
+        "grunt": "latest",
+        "grunt-ts": "latest",
+        "typescript": "2.7.2",
         "uglify-js": "latest",
         "chalk": "latest",
         "grunt-contrib-clean": "latest",

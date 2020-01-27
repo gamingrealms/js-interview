@@ -1,33 +1,38 @@
-var Game = (function () {
-    function Game() {
-        this.createRenderer();
-        this.createLoader();
-    }
-    Game.prototype.createRenderer = function () {
-        this.renderer = AbstractRenderer.getInstance().initialise(new PIXI.Point(300, 350));
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    Game.prototype.createLoader = function () {
-        this.loader = new Loader("xml/Config.xml");
-        this.loader.addEventListener(EventType.COMPLETE, this.handleLoadComplete, this);
-        this.loader.load();
-    };
-    Game.prototype.createModel = function () {
-        this.model = new GameModel(this.loader.getConfig());
-    };
-    Game.prototype.createController = function () {
-        this.controller = new GameController(this.model);
-    };
-    Game.prototype.createView = function () {
-        this.view = new GameView(this.model);
-        this.renderer.addChild(this.view);
-    };
-    Game.prototype.handleLoadComplete = function () {
-        this.createModel();
-        this.createController();
-        this.createView();
-    };
-    return Game;
 })();
+var GameOverEvent = (function (_super) {
+    __extends(GameOverEvent, _super);
+    function GameOverEvent(type) {
+        return _super.call(this, type) || this;
+    }
+    GameOverEvent.WIN = "GameOverEvent.WIN";
+    GameOverEvent.LOSE = "GameOverEvent.LOSE";
+    return GameOverEvent;
+}(EventObject));
+var PlayerLivesUpdatedEvent = (function (_super) {
+    __extends(PlayerLivesUpdatedEvent, _super);
+    function PlayerLivesUpdatedEvent() {
+        return _super.call(this, PlayerLivesUpdatedEvent.UPDATED) || this;
+    }
+    PlayerLivesUpdatedEvent.UPDATED = "PlayerLivesUpdatedEvent.UPDATED";
+    return PlayerLivesUpdatedEvent;
+}(EventObject));
+var PlayerScoreUpdatedEvent = (function (_super) {
+    __extends(PlayerScoreUpdatedEvent, _super);
+    function PlayerScoreUpdatedEvent() {
+        return _super.call(this, PlayerScoreUpdatedEvent.UPDATED) || this;
+    }
+    PlayerScoreUpdatedEvent.UPDATED = "PlayerScoreUpdatedEvent.UPDATED";
+    return PlayerScoreUpdatedEvent;
+}(EventObject));
 var GameController = (function () {
     function GameController(model) {
         this.model = model;
@@ -69,37 +74,37 @@ var GameController = (function () {
         this.eventBus.dispatchEvent(event);
     };
     return GameController;
-})();
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var GameOverEvent = (function (_super) {
-    __extends(GameOverEvent, _super);
-    function GameOverEvent(type) {
-        _super.call(this, type);
+}());
+var Game = (function () {
+    function Game() {
+        this.createRenderer();
+        this.createLoader();
     }
-    GameOverEvent.WIN = "GameOverEvent.WIN";
-    GameOverEvent.LOSE = "GameOverEvent.LOSE";
-    return GameOverEvent;
-})(EventObject);
-var PlayerLivesUpdatedEvent = (function (_super) {
-    __extends(PlayerLivesUpdatedEvent, _super);
-    function PlayerLivesUpdatedEvent() {
-        _super.call(this, PlayerLivesUpdatedEvent.UPDATED);
-    }
-    PlayerLivesUpdatedEvent.UPDATED = "PlayerLivesUpdatedEvent.UPDATED";
-    return PlayerLivesUpdatedEvent;
-})(EventObject);
-var PlayerScoreUpdatedEvent = (function (_super) {
-    __extends(PlayerScoreUpdatedEvent, _super);
-    function PlayerScoreUpdatedEvent() {
-        _super.call(this, PlayerScoreUpdatedEvent.UPDATED);
-    }
-    PlayerScoreUpdatedEvent.UPDATED = "PlayerScoreUpdatedEvent.UPDATED";
-    return PlayerScoreUpdatedEvent;
-})(EventObject);
+    Game.prototype.createRenderer = function () {
+        this.renderer = AbstractRenderer.getInstance().initialise(new PIXI.Point(300, 350));
+    };
+    Game.prototype.createLoader = function () {
+        this.loader = new Loader("xml/Config.xml");
+        this.loader.addEventListener(EventType.COMPLETE, this.handleLoadComplete, this);
+        this.loader.load();
+    };
+    Game.prototype.createModel = function () {
+        this.model = new GameModel(this.loader.getConfig());
+    };
+    Game.prototype.createController = function () {
+        this.controller = new GameController(this.model);
+    };
+    Game.prototype.createView = function () {
+        this.view = new GameView(this.model);
+        this.renderer.addChild(this.view);
+    };
+    Game.prototype.handleLoadComplete = function () {
+        this.createModel();
+        this.createController();
+        this.createView();
+    };
+    return Game;
+}());
 var GameModel = (function () {
     function GameModel(config) {
         this.config = config;
@@ -137,13 +142,15 @@ var GameModel = (function () {
         return this.numShields;
     };
     return GameModel;
-})();
+}());
 var AbstractView = (function (_super) {
     __extends(AbstractView, _super);
-    function AbstractView() {
-        _super.call(this);
-        this.create();
-        this.addEventListeners();
+    function AbstractView(model) {
+        var _this = _super.call(this) || this;
+        _this.model = model;
+        _this.create();
+        _this.addEventListeners();
+        return _this;
     }
     AbstractView.prototype.create = function () {
         this.createEventBus();
@@ -169,12 +176,332 @@ var AbstractView = (function (_super) {
     AbstractView.prototype.removeEventListeners = function () {
     };
     return AbstractView;
-})(PIXI.Container);
+}(PIXI.Container));
+var EnemyBullet = (function (_super) {
+    __extends(EnemyBullet, _super);
+    function EnemyBullet(model, position) {
+        var _this = _super.call(this, model) || this;
+        _this.sprite.position = position;
+        return _this;
+    }
+    EnemyBullet.prototype.create = function () {
+        _super.prototype.create.call(this);
+        this.createBullet();
+    };
+    EnemyBullet.prototype.dispose = function () {
+        if (this.parent) {
+            this.renderer.removeChild(this);
+        }
+    };
+    EnemyBullet.prototype.createBullet = function () {
+        this.sprite = AssetManager.getSprite(AssetManager.ENEMY_BULLET);
+        this.addChild(this.sprite);
+    };
+    EnemyBullet.prototype.fire = function () {
+        this.renderer.addChild(this);
+        this.tween = TweenMax.to(this.sprite.position, 1, {
+            y: this.renderer.getGameSize().y,
+            ease: Linear.easeNone,
+            onUpdate: ObjectUtil.delegate(this.handleTweenUpdate, this),
+            onComplete: ObjectUtil.delegate(this.handleTweenComplete, this)
+        });
+    };
+    EnemyBullet.prototype.handleTweenUpdate = function () {
+        this.dispatch(new EnemyBulletEvent(this));
+    };
+    EnemyBullet.prototype.handleTweenComplete = function () {
+        this.dispose();
+    };
+    EnemyBullet.prototype.getSprite = function () {
+        return this.sprite;
+    };
+    return EnemyBullet;
+}(AbstractView));
+var EnemyShip = (function (_super) {
+    __extends(EnemyShip, _super);
+    function EnemyShip() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    EnemyShip.prototype.create = function () {
+        _super.prototype.create.call(this);
+        this.createShip();
+        this.createTweens();
+        this.startMoveTimer();
+        this.startFireTimer();
+    };
+    EnemyShip.prototype.dispose = function () {
+        if (this.parent) {
+            this.parent.removeChild(this);
+        }
+        this.moveTimer.removeEventListener(TimerEvent.TIMER, this);
+        this.fireTimer.removeEventListener(TimerEvent.TIMER, this);
+        this.remove(PlayerBulletEvent.MOVE, this);
+        this.dispatch(new EnemyShipEvent());
+    };
+    EnemyShip.prototype.addEventListeners = function () {
+        this.listen(PlayerBulletEvent.MOVE, this.handlePlayerBullet, this);
+    };
+    EnemyShip.prototype.createShip = function () {
+        this.ship = AssetManager.getMovieClip(AssetManager.ENEMY_SHIP);
+        this.ship.play();
+        this.addChild(this.ship);
+    };
+    EnemyShip.prototype.createTweens = function () {
+        this.tweens = new Dictionary();
+    };
+    EnemyShip.prototype.startMoveTimer = function () {
+        this.moveTimer = new Timer(1000);
+        this.moveTimer.addEventListener(TimerEvent.TIMER, this.handleMoveTimerUpdate, this);
+        this.moveTimer.start();
+    };
+    EnemyShip.prototype.startFireTimer = function () {
+        this.fireTimer = new Timer(1500);
+        this.fireTimer.addEventListener(TimerEvent.TIMER, this.handleFireTimeUpdate, this);
+        this.fireTimer.start();
+    };
+    EnemyShip.prototype.handleMoveTimerUpdate = function (event) {
+        this.move(this.randomPoint);
+    };
+    EnemyShip.prototype.handleFireTimeUpdate = function (event) {
+        new EnemyBullet(this.model, this.ship.position.clone()).fire();
+    };
+    EnemyShip.prototype.handlePlayerBullet = function (event) {
+        if (BoundsUtil.isInBounds(this.ship, event.getBullet().getSprite())) {
+            this.dispose();
+        }
+    };
+    EnemyShip.prototype.move = function (point) {
+        this.tweens.setValue("x", TweenMax.to(this.ship.position, 1, { "x": point.x, ease: Linear.easeIn }));
+        this.tweens.setValue("y", TweenMax.to(this.ship.position, 1, { "y": point.y, ease: Linear.easeIn }));
+    };
+    Object.defineProperty(EnemyShip.prototype, "randomPoint", {
+        get: function () {
+            var x = Math.random() * (this.renderer.getGameSize().x - this.ship.width);
+            var y = Math.random() * (this.renderer.getGameSize().y - this.ship.height - 150);
+            return new PIXI.Point(x, y);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return EnemyShip;
+}(AbstractView));
+var PlayerBullet = (function (_super) {
+    __extends(PlayerBullet, _super);
+    function PlayerBullet(model, position) {
+        var _this = _super.call(this, model) || this;
+        _this.sprite.position = position;
+        return _this;
+    }
+    PlayerBullet.prototype.create = function () {
+        _super.prototype.create.call(this);
+        this.createBullet();
+    };
+    PlayerBullet.prototype.dispose = function () {
+        if (this.parent) {
+            this.renderer.removeChild(this);
+        }
+    };
+    PlayerBullet.prototype.createBullet = function () {
+        this.sprite = AssetManager.getSprite(AssetManager.PLAYER_BULLET);
+        this.addChild(this.sprite);
+    };
+    PlayerBullet.prototype.fire = function () {
+        this.renderer.addChild(this);
+        this.tween = TweenMax.to(this.sprite.position, 1, {
+            y: 0,
+            ease: Linear.easeNone,
+            onUpdate: ObjectUtil.delegate(this.handleTweenUpdate, this),
+            onComplete: ObjectUtil.delegate(this.handleTweenComplete, this)
+        });
+    };
+    PlayerBullet.prototype.handleTweenUpdate = function () {
+        this.dispatch(new PlayerBulletEvent(this));
+    };
+    PlayerBullet.prototype.handleTweenComplete = function () {
+        this.dispose();
+    };
+    PlayerBullet.prototype.getSprite = function () {
+        return this.sprite;
+    };
+    return PlayerBullet;
+}(AbstractView));
+var PlayerShip = (function (_super) {
+    __extends(PlayerShip, _super);
+    function PlayerShip() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    PlayerShip.prototype.create = function () {
+        _super.prototype.create.call(this);
+        this.createShip();
+    };
+    PlayerShip.prototype.createShip = function () {
+        this.ship = AssetManager.getSprite(AssetManager.PLAYER_SHIP);
+        this.ship.interactive = true;
+        this.addChild(this.ship);
+        this.ship.position = new PIXI.Point(125, this.renderer.getGameSize().y - (this.renderer.getGameSize().y / 8));
+    };
+    PlayerShip.prototype.dispose = function () {
+        if (this.ship.parent) {
+            this.removeChild(this.ship);
+        }
+        this.removeEventListeners();
+        this.dispatch(new PlayerShipEvent());
+    };
+    PlayerShip.prototype.addEventListeners = function () {
+        var stage = this.renderer.getStage();
+        MouseUtil.setInteractive(stage, true);
+        MouseUtil.addMouseMove(stage, this.handleMouseMove, this);
+        MouseUtil.addMouseDown(stage, this.handleMouseDown, this);
+        this.listen(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
+    };
+    PlayerShip.prototype.removeEventListeners = function () {
+        var stage = this.renderer.getStage();
+        MouseUtil.removeMouseMove(stage, this.handleMouseMove);
+        MouseUtil.removeMouseDown(stage, this.handleMouseDown);
+        this.remove(EnemyBulletEvent.MOVE, this);
+    };
+    PlayerShip.prototype.handleMouseDown = function () {
+        var x = this.ship.position.x + (this.ship.width / 2);
+        var y = this.ship.position.y;
+        var bulletPosition = new PIXI.Point(x, y);
+        new PlayerBullet(this.model, bulletPosition).fire();
+    };
+    PlayerShip.prototype.handleMouseMove = function (event) {
+        var data = event.data;
+        this.ship.position = new PIXI.Point(data.global.x, this.ship.position.y);
+    };
+    PlayerShip.prototype.handleEnemyBulletMove = function (event) {
+        if (BoundsUtil.isInBounds(this.ship, event.getBullet().getSprite())) {
+            this.dispose();
+        }
+    };
+    PlayerShip.prototype.revive = function () {
+        var stage = this.renderer.getStage();
+        MouseUtil.setInteractive(stage, true);
+        MouseUtil.addMouseMove(stage, this.handleMouseMove, this);
+        MouseUtil.addMouseDown(stage, this.handleMouseDown, this);
+        this.startFlashTimer();
+        this.addChild(this.ship);
+    };
+    PlayerShip.prototype.startFlashTimer = function () {
+        var flashTimer = new Timer(300, 5);
+        flashTimer.addEventListener(TimerEvent.TIMER, this.handleFlashTimerUpdate, this);
+        flashTimer.addEventListener(TimerEvent.COMPLETE, this.handleFlashTimerComplete, this);
+        flashTimer.start();
+    };
+    PlayerShip.prototype.handleFlashTimerUpdate = function (event) {
+        this.ship.visible = !this.ship.visible;
+    };
+    PlayerShip.prototype.handleFlashTimerComplete = function (event) {
+        this.ship.visible = true;
+        this.listen(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
+    };
+    return PlayerShip;
+}(AbstractView));
+var Shield = (function (_super) {
+    __extends(Shield, _super);
+    function Shield() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Shield.prototype.create = function () {
+        _super.prototype.create.call(this);
+        this.createBlocks();
+    };
+    Shield.prototype.addEventListeners = function () {
+        this.listen(PlayerBulletEvent.MOVE, this.handlePlayerBulletMove, this);
+        this.listen(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
+    };
+    Shield.prototype.createBlocks = function () {
+        this.blocks = [];
+        for (var i = 0; i < Shield.STRUCTURE.length; i++) {
+            var range = Shield.STRUCTURE[i];
+            var block = void 0;
+            for (var j = range.x; j < range.y; j++) {
+                block = this.createBlock(j, i);
+                this.addChild(block);
+                this.blocks.push(block);
+            }
+        }
+    };
+    Shield.prototype.createBlock = function (x, y) {
+        var block = AssetManager.getSprite(AssetManager.SHIELD);
+        block.position = new PIXI.Point(x * block.width, y * block.height);
+        return block;
+    };
+    Shield.prototype.handlePlayerBulletMove = function (event) {
+        var bullet = event.getBullet();
+        var block = this.checkBlockBounds(bullet.getSprite());
+        if (block) {
+            block.visible = false;
+            bullet.dispose();
+        }
+    };
+    Shield.prototype.handleEnemyBulletMove = function (event) {
+        var bullet = event.getBullet();
+        var block = this.checkBlockBounds(bullet.getSprite());
+        if (block) {
+            block.visible = false;
+            bullet.dispose();
+        }
+    };
+    Shield.prototype.checkBlockBounds = function (bullet) {
+        for (var i = 0; i < this.blocks.length; i++) {
+            var block = this.blocks[i];
+            if (block.visible && BoundsUtil.isInBounds(block, bullet)) {
+                return block;
+            }
+        }
+        return null;
+    };
+    Shield.STRUCTURE = [new PIXI.Point(0, 10), new PIXI.Point(1, 9), new PIXI.Point(2, 8)];
+    return Shield;
+}(AbstractView));
+var EnemyBulletEvent = (function (_super) {
+    __extends(EnemyBulletEvent, _super);
+    function EnemyBulletEvent(data) {
+        var _this = _super.call(this, EnemyBulletEvent.MOVE) || this;
+        _this.bullet = data;
+        return _this;
+    }
+    EnemyBulletEvent.prototype.getBullet = function () {
+        return this.bullet;
+    };
+    EnemyBulletEvent.MOVE = 'EnemyBulletEvent.MOVE';
+    return EnemyBulletEvent;
+}(EventObject));
+var EnemyShipEvent = (function (_super) {
+    __extends(EnemyShipEvent, _super);
+    function EnemyShipEvent() {
+        return _super.call(this, EnemyShipEvent.DEAD) || this;
+    }
+    EnemyShipEvent.DEAD = 'EnemyShipEvent.DEAD';
+    return EnemyShipEvent;
+}(EventObject));
+var PlayerBulletEvent = (function (_super) {
+    __extends(PlayerBulletEvent, _super);
+    function PlayerBulletEvent(data) {
+        var _this = _super.call(this, PlayerBulletEvent.MOVE) || this;
+        _this.bullet = data;
+        return _this;
+    }
+    PlayerBulletEvent.prototype.getBullet = function () {
+        return this.bullet;
+    };
+    PlayerBulletEvent.MOVE = 'PlayerBulletEvent.MOVE';
+    return PlayerBulletEvent;
+}(EventObject));
+var PlayerShipEvent = (function (_super) {
+    __extends(PlayerShipEvent, _super);
+    function PlayerShipEvent() {
+        return _super.call(this, PlayerShipEvent.DEAD) || this;
+    }
+    PlayerShipEvent.DEAD = 'PlayerShipEvent.DEAD';
+    return PlayerShipEvent;
+}(EventObject));
 var GameView = (function (_super) {
     __extends(GameView, _super);
     function GameView(model) {
-        this.model = model;
-        _super.call(this);
+        return _super.call(this, model) || this;
     }
     GameView.prototype.create = function () {
         _super.prototype.create.call(this);
@@ -193,14 +520,14 @@ var GameView = (function (_super) {
         this.addChild(this.background);
     };
     GameView.prototype.createPlayerShip = function () {
-        this.playerShip = new PlayerShip();
+        this.playerShip = new PlayerShip(this.model);
         this.addChild(this.playerShip);
     };
     GameView.prototype.createEnemyShips = function () {
         this.enemyShips = [];
         var ship;
         for (var i = 0; i < this.model.getNumEnemies(); i++) {
-            ship = new EnemyShip();
+            ship = new EnemyShip(this.model);
             this.enemyShips.push(ship);
             this.renderer.addChild(ship);
         }
@@ -210,7 +537,7 @@ var GameView = (function (_super) {
         this.shields = [];
         var shield;
         for (var i = 0; i < this.model.getNumShields(); i++) {
-            shield = new Shield();
+            shield = new Shield(this.model);
             shield.position = shieldPosition;
             shieldPosition = new PIXI.Point(shieldPosition.x + (this.renderer.getGameSize().x / this.model.getNumShields()), shieldPosition.y);
             this.addChild(shield);
@@ -265,367 +592,50 @@ var GameView = (function (_super) {
         }
     };
     return GameView;
-})(AbstractView);
-var EnemyBullet = (function (_super) {
-    __extends(EnemyBullet, _super);
-    function EnemyBullet(position) {
-        _super.call(this);
-        this.sprite.position = position;
-    }
-    EnemyBullet.prototype.create = function () {
-        _super.prototype.create.call(this);
-        this.createBullet();
-    };
-    EnemyBullet.prototype.dispose = function () {
-        if (this.parent) {
-            this.renderer.removeChild(this);
-        }
-    };
-    EnemyBullet.prototype.createBullet = function () {
-        this.sprite = Style.getSprite(Style.ENEMY_BULLET);
-        this.addChild(this.sprite);
-    };
-    EnemyBullet.prototype.fire = function () {
-        this.renderer.addChild(this);
-        this.tween = TweenMax.to(this.sprite.position, 1, {
-            y: this.renderer.getGameSize().y,
-            ease: Linear.easeNone,
-            onUpdate: ObjectUtil.delegate(this.handleTweenUpdate, this),
-            onComplete: ObjectUtil.delegate(this.handleTweenComplete, this)
-        });
-    };
-    EnemyBullet.prototype.handleTweenUpdate = function () {
-        this.dispatch(new EnemyBulletEvent(this));
-    };
-    EnemyBullet.prototype.handleTweenComplete = function () {
-        this.dispose();
-    };
-    EnemyBullet.prototype.getSprite = function () {
-        return this.sprite;
-    };
-    return EnemyBullet;
-})(AbstractView);
-var EnemyShip = (function (_super) {
-    __extends(EnemyShip, _super);
-    function EnemyShip() {
-        _super.apply(this, arguments);
-    }
-    EnemyShip.prototype.create = function () {
-        _super.prototype.create.call(this);
-        this.createShip();
-        this.createTweens();
-        this.startMoveTimer();
-        this.startFireTimer();
-    };
-    EnemyShip.prototype.dispose = function () {
-        if (this.parent) {
-            this.parent.removeChild(this);
-        }
-        this.moveTimer.removeEventListener(TimerEvent.TIMER, this);
-        this.fireTimer.removeEventListener(TimerEvent.TIMER, this);
-        this.remove(PlayerBulletEvent.MOVE, this);
-        this.dispatch(new EnemyShipEvent());
-    };
-    EnemyShip.prototype.addEventListeners = function () {
-        this.listen(PlayerBulletEvent.MOVE, this.handlePlayerBullet, this);
-    };
-    EnemyShip.prototype.createShip = function () {
-        this.ship = Style.getMovieClip(Style.ENEMY_SHIP);
-        this.ship.play();
-        this.addChild(this.ship);
-    };
-    EnemyShip.prototype.createTweens = function () {
-        this.tweens = new Dictionary();
-    };
-    EnemyShip.prototype.startMoveTimer = function () {
-        this.moveTimer = new Timer(1000);
-        this.moveTimer.addEventListener(TimerEvent.TIMER, this.handleMoveTimerUpdate, this);
-        this.moveTimer.start();
-    };
-    EnemyShip.prototype.startFireTimer = function () {
-        this.fireTimer = new Timer(1500);
-        this.fireTimer.addEventListener(TimerEvent.TIMER, this.handleFireTimeUpdate, this);
-        this.fireTimer.start();
-    };
-    EnemyShip.prototype.handleMoveTimerUpdate = function (event) {
-        this.move(this.randomPoint);
-    };
-    EnemyShip.prototype.handleFireTimeUpdate = function (event) {
-        new EnemyBullet(this.ship.position.clone()).fire();
-    };
-    EnemyShip.prototype.handlePlayerBullet = function (event) {
-        if (BoundsUtil.isInBounds(this.ship, event.getBullet().getSprite())) {
-            this.dispose();
-        }
-    };
-    EnemyShip.prototype.move = function (point) {
-        this.tweens.setValue("x", TweenMax.to(this.ship.position, 1, { "x": point.x, ease: Linear.easeIn }));
-        this.tweens.setValue("y", TweenMax.to(this.ship.position, 1, { "y": point.y, ease: Linear.easeIn }));
-    };
-    Object.defineProperty(EnemyShip.prototype, "randomPoint", {
-        get: function () {
-            var x = Math.random() * (this.renderer.getGameSize().x - this.ship.width);
-            var y = Math.random() * (this.renderer.getGameSize().y - this.ship.height - 150);
-            return new PIXI.Point(x, y);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return EnemyShip;
-})(AbstractView);
-var PlayerBullet = (function (_super) {
-    __extends(PlayerBullet, _super);
-    function PlayerBullet(position) {
-        _super.call(this);
-        this.sprite.position = position;
-    }
-    PlayerBullet.prototype.create = function () {
-        _super.prototype.create.call(this);
-        this.createBullet();
-    };
-    PlayerBullet.prototype.dispose = function () {
-        if (this.parent) {
-            this.renderer.removeChild(this);
-        }
-    };
-    PlayerBullet.prototype.createBullet = function () {
-        this.sprite = Style.getSprite(Style.PLAYER_BULLET);
-        this.addChild(this.sprite);
-    };
-    PlayerBullet.prototype.fire = function () {
-        this.renderer.addChild(this);
-        this.tween = TweenMax.to(this.sprite.position, 1, {
-            y: 0,
-            ease: Linear.easeNone,
-            onUpdate: ObjectUtil.delegate(this.handleTweenUpdate, this),
-            onComplete: ObjectUtil.delegate(this.handleTweenComplete, this)
-        });
-    };
-    PlayerBullet.prototype.handleTweenUpdate = function () {
-        this.dispatch(new PlayerBulletEvent(this));
-    };
-    PlayerBullet.prototype.handleTweenComplete = function () {
-        this.dispose();
-    };
-    PlayerBullet.prototype.getSprite = function () {
-        return this.sprite;
-    };
-    return PlayerBullet;
-})(AbstractView);
-var PlayerShip = (function (_super) {
-    __extends(PlayerShip, _super);
-    function PlayerShip() {
-        _super.apply(this, arguments);
-    }
-    PlayerShip.prototype.create = function () {
-        _super.prototype.create.call(this);
-        this.createShip();
-    };
-    PlayerShip.prototype.createShip = function () {
-        this.ship = Style.getSprite(Style.PLAYER_SHIP);
-        this.ship.interactive = true;
-        this.addChild(this.ship);
-        this.ship.position = new PIXI.Point(125, this.renderer.getGameSize().y - (this.renderer.getGameSize().y / 8));
-    };
-    PlayerShip.prototype.dispose = function () {
-        if (this.ship.parent) {
-            this.removeChild(this.ship);
-        }
-        this.removeEventListeners();
-        this.dispatch(new PlayerShipEvent());
-    };
-    PlayerShip.prototype.addEventListeners = function () {
-        var stage = this.renderer.getStage();
-        MouseUtil.setInteractive(stage, true);
-        MouseUtil.addMouseMove(stage, this.handleMouseMove, this);
-        MouseUtil.addMouseDown(stage, this.handleMouseDown, this);
-        this.listen(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
-    };
-    PlayerShip.prototype.removeEventListeners = function () {
-        var stage = this.renderer.getStage();
-        MouseUtil.removeMouseMove(stage, this.handleMouseMove);
-        MouseUtil.removeMouseDown(stage, this.handleMouseDown);
-        this.remove(EnemyBulletEvent.MOVE, this);
-    };
-    PlayerShip.prototype.handleMouseDown = function () {
-        var x = this.ship.position.x + (this.ship.width / 2);
-        var y = this.ship.position.y;
-        var bulletPosition = new PIXI.Point(x, y);
-        new PlayerBullet(bulletPosition).fire();
-    };
-    PlayerShip.prototype.handleMouseMove = function (event) {
-        var data = event.data;
-        this.ship.position = new PIXI.Point(data.global.x, this.ship.position.y);
-    };
-    PlayerShip.prototype.handleEnemyBulletMove = function (event) {
-        if (BoundsUtil.isInBounds(this.ship, event.getBullet().getSprite())) {
-            this.dispose();
-        }
-    };
-    PlayerShip.prototype.revive = function () {
-        var stage = this.renderer.getStage();
-        MouseUtil.setInteractive(stage, true);
-        MouseUtil.addMouseMove(stage, this.handleMouseMove, this);
-        MouseUtil.addMouseDown(stage, this.handleMouseDown, this);
-        this.startFlashTimer();
-        this.addChild(this.ship);
-    };
-    PlayerShip.prototype.startFlashTimer = function () {
-        var flashTimer = new Timer(300, 5);
-        flashTimer.addEventListener(TimerEvent.TIMER, this.handleFlashTimerUpdate, this);
-        flashTimer.addEventListener(TimerEvent.COMPLETE, this.handleFlashTimerComplete, this);
-        flashTimer.start();
-    };
-    PlayerShip.prototype.handleFlashTimerUpdate = function (event) {
-        this.ship.visible = !this.ship.visible;
-    };
-    PlayerShip.prototype.handleFlashTimerComplete = function (event) {
-        this.ship.visible = true;
-        this.listen(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
-    };
-    return PlayerShip;
-})(AbstractView);
-var Shield = (function (_super) {
-    __extends(Shield, _super);
-    function Shield() {
-        _super.apply(this, arguments);
-    }
-    Shield.prototype.create = function () {
-        _super.prototype.create.call(this);
-        this.createBlocks();
-    };
-    Shield.prototype.addEventListeners = function () {
-        this.listen(PlayerBulletEvent.MOVE, this.handlePlayerBulletMove, this);
-        this.listen(EnemyBulletEvent.MOVE, this.handleEnemyBulletMove, this);
-    };
-    Shield.prototype.createBlocks = function () {
-        this.blocks = [];
-        for (var i = 0; i < Shield.STRUCTURE.length; i++) {
-            var range = Shield.STRUCTURE[i];
-            var block;
-            for (var j = range.x; j < range.y; j++) {
-                block = this.createBlock(j, i);
-                this.addChild(block);
-                this.blocks.push(block);
-            }
-        }
-    };
-    Shield.prototype.createBlock = function (x, y) {
-        var block = Style.getSprite(Style.SHIELD);
-        block.position = new PIXI.Point(x * block.width, y * block.height);
-        return block;
-    };
-    Shield.prototype.handlePlayerBulletMove = function (event) {
-        var bullet = event.getBullet();
-        var block = this.checkBlockBounds(bullet.getSprite());
-        if (block) {
-            block.visible = false;
-            bullet.dispose();
-        }
-    };
-    Shield.prototype.handleEnemyBulletMove = function (event) {
-        var bullet = event.getBullet();
-        var block = this.checkBlockBounds(bullet.getSprite());
-        if (block) {
-            block.visible = false;
-            bullet.dispose();
-        }
-    };
-    Shield.prototype.checkBlockBounds = function (bullet) {
-        for (var i = 0; i < this.blocks.length; i++) {
-            var block = this.blocks[i];
-            if (block.visible && BoundsUtil.isInBounds(block, bullet)) {
-                return block;
-            }
-        }
-        return null;
-    };
-    Shield.STRUCTURE = [new PIXI.Point(0, 10), new PIXI.Point(1, 9), new PIXI.Point(2, 8)];
-    return Shield;
-})(AbstractView);
-var EnemyBulletEvent = (function (_super) {
-    __extends(EnemyBulletEvent, _super);
-    function EnemyBulletEvent(data) {
-        _super.call(this, EnemyBulletEvent.MOVE);
-        this.bullet = data;
-    }
-    EnemyBulletEvent.prototype.getBullet = function () {
-        return this.bullet;
-    };
-    EnemyBulletEvent.MOVE = 'EnemyBulletEvent.MOVE';
-    return EnemyBulletEvent;
-})(EventObject);
-var EnemyShipEvent = (function (_super) {
-    __extends(EnemyShipEvent, _super);
-    function EnemyShipEvent() {
-        _super.call(this, EnemyShipEvent.DEAD);
-    }
-    EnemyShipEvent.DEAD = 'EnemyShipEvent.DEAD';
-    return EnemyShipEvent;
-})(EventObject);
-var PlayerBulletEvent = (function (_super) {
-    __extends(PlayerBulletEvent, _super);
-    function PlayerBulletEvent(data) {
-        _super.call(this, PlayerBulletEvent.MOVE);
-        this.bullet = data;
-    }
-    PlayerBulletEvent.prototype.getBullet = function () {
-        return this.bullet;
-    };
-    PlayerBulletEvent.MOVE = 'PlayerBulletEvent.MOVE';
-    return PlayerBulletEvent;
-})(EventObject);
-var PlayerShipEvent = (function (_super) {
-    __extends(PlayerShipEvent, _super);
-    function PlayerShipEvent() {
-        _super.call(this, PlayerShipEvent.DEAD);
-    }
-    PlayerShipEvent.DEAD = 'PlayerShipEvent.DEAD';
-    return PlayerShipEvent;
-})(EventObject);
+}(AbstractView));
 var Font = (function () {
     function Font() {
     }
     Font.HELVETICA = "12px Helvetica";
     return Font;
-})();
-var Style = (function () {
-    function Style() {
+}());
+var AssetManager = (function () {
+    function AssetManager() {
     }
-    Style.addPath = function (filePath) {
-        Style.map[filePath.id] = filePath;
+    AssetManager.addPath = function (filePath) {
+        AssetManager.map[filePath.id] = filePath;
     };
-    Style.getPath = function (id) {
-        return Style.map[id];
+    AssetManager.getPath = function (id) {
+        return AssetManager.map[id];
     };
-    Style.getSprite = function (id) {
+    AssetManager.getSprite = function (id) {
         var path = this.getPath(id);
         return PIXI.Sprite.fromImage(path.url);
     };
-    Style.getMovieClip = function (id) {
+    AssetManager.getMovieClip = function (id) {
         var path = this.getPath(id);
         var textures = [];
         for (var i = 0; i < path.frames; i++) {
-            var texture = PIXI.Texture.fromFrame(path.id + Style.formatTexture(i));
+            var texture = PIXI.Texture.fromFrame(path.id + AssetManager.formatTexture(i));
             textures.push(texture);
         }
         return new PIXI.extras.MovieClip(textures);
     };
-    Style.formatTexture = function (num) {
+    AssetManager.formatTexture = function (num) {
         var r = num.toString();
         while (r.length < 4) {
             r = "0" + r;
         }
         return r;
     };
-    Style.PLAYER_SHIP = "PlayerShip";
-    Style.PLAYER_BULLET = "PlayerBullet";
-    Style.ENEMY_SHIP = "EnemyShip";
-    Style.ENEMY_BULLET = "EnemyBullet";
-    Style.SHIELD = "Shield";
-    Style.map = new Dictionary();
-    return Style;
-})();
+    AssetManager.PLAYER_SHIP = "PlayerShip";
+    AssetManager.PLAYER_BULLET = "PlayerBullet";
+    AssetManager.ENEMY_SHIP = "EnemyShip";
+    AssetManager.ENEMY_BULLET = "EnemyBullet";
+    AssetManager.SHIELD = "Shield";
+    AssetManager.map = new Dictionary();
+    return AssetManager;
+}());
 var BoundsUtil = (function () {
     function BoundsUtil() {
     }
@@ -639,43 +649,7 @@ var BoundsUtil = (function () {
         return new PIXI.Point(object.worldTransform.tx, object.worldTransform.ty);
     };
     return BoundsUtil;
-})();
-var Loader = (function (_super) {
-    __extends(Loader, _super);
-    function Loader(url) {
-        _super.call(this);
-        this.url = url;
-    }
-    Loader.prototype.load = function () {
-        var request = new ConfigRequest(this.url);
-        request.addEventListener(EventType.COMPLETE, this.handleConfigComplete, this);
-        request.load();
-    };
-    Loader.prototype.handleConfigComplete = function (event) {
-        var request = event.currentTarget;
-        this.config = request.getConfig();
-        var files = request.getConfig().getFiles();
-        var values = files.getValues();
-        var filesToLoad = [];
-        var filePath;
-        for (var i = 0; i < values.length; i++) {
-            filePath = values[i];
-            filesToLoad.push(filePath.url);
-            Style.addPath(filePath);
-        }
-        this.loader = new PIXI.loaders.Loader();
-        this.loader.add(filesToLoad);
-        this.loader.once("complete", ObjectUtil.delegate(this.handleFilesComplete, this));
-        this.loader.load();
-    };
-    Loader.prototype.handleFilesComplete = function () {
-        this.dispatchEvent(new EventObject(EventType.COMPLETE));
-    };
-    Loader.prototype.getConfig = function () {
-        return this.config;
-    };
-    return Loader;
-})(EventDispatcher);
+}());
 var ConfigData = (function () {
     function ConfigData(document) {
         this.document = document;
@@ -713,12 +687,50 @@ var ConfigData = (function () {
         return this.files;
     };
     return ConfigData;
-})();
+}());
+var Loader = (function (_super) {
+    __extends(Loader, _super);
+    function Loader(url) {
+        var _this = _super.call(this) || this;
+        _this.url = url;
+        return _this;
+    }
+    Loader.prototype.load = function () {
+        var request = new ConfigRequest(this.url);
+        request.addEventListener(EventType.COMPLETE, this.handleConfigComplete, this);
+        request.load();
+    };
+    Loader.prototype.handleConfigComplete = function (event) {
+        var request = event.currentTarget;
+        this.config = request.getConfig();
+        var files = request.getConfig().getFiles();
+        var values = files.getValues();
+        var filesToLoad = [];
+        var filePath;
+        for (var i = 0; i < values.length; i++) {
+            filePath = values[i];
+            filesToLoad.push(filePath.url);
+            AssetManager.addPath(filePath);
+        }
+        this.loader = new PIXI.loaders.Loader();
+        this.loader.add(filesToLoad);
+        this.loader.once("complete", ObjectUtil.delegate(this.handleFilesComplete, this));
+        this.loader.load();
+    };
+    Loader.prototype.handleFilesComplete = function () {
+        this.dispatchEvent(new EventObject(EventType.COMPLETE));
+    };
+    Loader.prototype.getConfig = function () {
+        return this.config;
+    };
+    return Loader;
+}(EventDispatcher));
 var ConfigRequest = (function (_super) {
     __extends(ConfigRequest, _super);
     function ConfigRequest(url) {
-        _super.call(this);
-        this.url = url;
+        var _this = _super.call(this) || this;
+        _this.url = url;
+        return _this;
     }
     ConfigRequest.prototype.load = function () {
         $.get(this.url, null, ObjectUtil.delegate(this.handleConfigComplete, this), "xml");
@@ -731,32 +743,4 @@ var ConfigRequest = (function (_super) {
         return this.config;
     };
     return ConfigRequest;
-})(EventDispatcher);
-/* 3rd Party Definitions */
-///<reference path='../d/jquery.d.ts'/>
-///<reference path='../d/pixi.d.ts'/>
-///<reference path='../d/greensock.d.ts'/>
-///<reference path='../d/js-interview-core.d.ts'/>
-/// <reference path="../ts/com/game/Game.ts" />
-/// <reference path="../ts/com/game/controller/GameController.ts" />
-/// <reference path="../ts/com/game/controller/event/GameOverEvent.ts" />
-/// <reference path="../ts/com/game/controller/event/PlayerLivesUpdatedEvent.ts" />
-/// <reference path="../ts/com/game/controller/event/PlayerScoreUpdatedEvent.ts" />
-/// <reference path="../ts/com/game/model/GameModel.ts" />
-/// <reference path="../ts/com/game/view/AbstractView.ts" />
-/// <reference path="../ts/com/game/view/GameView.ts" />
-/// <reference path="../ts/com/game/view/display/EnemyBullet.ts" />
-/// <reference path="../ts/com/game/view/display/EnemyShip.ts" />
-/// <reference path="../ts/com/game/view/display/PlayerBullet.ts" />
-/// <reference path="../ts/com/game/view/display/PlayerShip.ts" />
-/// <reference path="../ts/com/game/view/display/Shield.ts" />
-/// <reference path="../ts/com/game/view/event/EnemyBulletEvent.ts" />
-/// <reference path="../ts/com/game/view/event/EnemyShipEvent.ts" />
-/// <reference path="../ts/com/game/view/event/PlayerBulletEvent.ts" />
-/// <reference path="../ts/com/game/view/event/PlayerShipEvent.ts" />
-/// <reference path="../ts/com/game/view/style/Font.ts" />
-/// <reference path="../ts/com/game/view/style/Style.ts" />
-/// <reference path="../ts/com/game/view/util/BoundsUtil.ts" />
-/// <reference path="../ts/com/loading/Loader.ts" />
-/// <reference path="../ts/com/loading/data/ConfigData.ts" />
-/// <reference path="../ts/com/loading/request/ConfigRequest.ts" />
+}(EventDispatcher));

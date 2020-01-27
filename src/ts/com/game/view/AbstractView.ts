@@ -1,42 +1,44 @@
 class AbstractView extends PIXI.Container {
 
-    protected renderer:AbstractRenderer;
-    protected eventBus:EventBus;
+    protected renderer: AbstractRenderer;
+    protected eventBus: EventBus;
+    protected model: GameModel;
 
-    constructor() {
+    constructor(model: GameModel) {
         super();
+        this.model = model;
         this.create();
         this.addEventListeners();
     }
 
-    public create():void {
+    public create(): void {
         this.createEventBus();
         this.createRenderer();
     }
 
-    private createRenderer():void {
+    private createRenderer(): void {
         this.renderer = AbstractRenderer.getInstance();
     }
 
-    private createEventBus():void {
+    private createEventBus(): void {
         this.eventBus = EventBus.getInstance();
     }
 
-    public listen(type:string, handler:Function, scope:Object):void {
+    public listen(type: string, handler: Function, scope: Object): void {
         this.eventBus.addEventListener(type, handler, scope);
     }
 
-    public remove(type:string, scope:Object):void {
+    public remove(type: string, scope: Object): void {
         this.eventBus.removeEventListener(type, scope);
     }
 
-    public dispatch(event:EventObject):void {
+    public dispatch(event: EventObject): void {
         this.eventBus.dispatchEvent(event);
     }
 
-    public addEventListeners():void {
+    public addEventListeners(): void {
     }
 
-    public removeEventListeners():void {
+    public removeEventListeners(): void {
     }
 }

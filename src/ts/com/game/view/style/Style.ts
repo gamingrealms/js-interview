@@ -1,4 +1,4 @@
-class Style {
+class AssetManager {
 
     public static PLAYER_SHIP:string = "PlayerShip";
     public static PLAYER_BULLET:string = "PlayerBullet";
@@ -9,30 +9,30 @@ class Style {
     private static map:Dictionary<string,string> = new Dictionary<string, string>();
 
     public static addPath(filePath:FilePath):void {
-        Style.map[filePath.id] = filePath;
+        AssetManager.map[filePath.id] = filePath;
     }
 
     private static getPath(id:string):FilePath {
-        return Style.map[id];
+        return AssetManager.map[id];
     }
 
     public static getSprite(id:string):PIXI.Sprite {
-        var path:FilePath = this.getPath(id);
+        let path:FilePath = this.getPath(id);
         return PIXI.Sprite.fromImage(path.url);
     }
 
     public static getMovieClip(id:string):PIXI.extras.MovieClip {
-        var path:SpriteSheetFilePath = <SpriteSheetFilePath> this.getPath(id);
-        var textures:Array<PIXI.Texture> = [];
-        for (var i = 0; i < path.frames; i++) {
-            var texture:PIXI.Texture = PIXI.Texture.fromFrame(path.id + Style.formatTexture(i));
+        let path:SpriteSheetFilePath = <SpriteSheetFilePath> this.getPath(id);
+        let textures:Array<PIXI.Texture> = [];
+        for (let i = 0; i < path.frames; i++) {
+            let texture:PIXI.Texture = PIXI.Texture.fromFrame(path.id + AssetManager.formatTexture(i));
             textures.push(texture);
         }
         return new PIXI.extras.MovieClip(textures);
     }
 
     private static formatTexture(num:number):string {
-        var r:string = num.toString();
+        let r:string = num.toString();
         while (r.length < 4) {
             r = "0" + r;
         }

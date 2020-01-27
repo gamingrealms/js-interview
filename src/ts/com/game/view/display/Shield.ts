@@ -16,10 +16,10 @@ class Shield extends AbstractView {
 
     private createBlocks():void {
         this.blocks = [];
-        for (var i:number = 0; i < Shield.STRUCTURE.length; i++) {
-            var range:PIXI.Point = Shield.STRUCTURE[i];
-            var block:PIXI.Sprite;
-            for (var j:number = range.x; j < range.y; j++) {
+        for (let i:number = 0; i < Shield.STRUCTURE.length; i++) {
+            let range:PIXI.Point = Shield.STRUCTURE[i];
+            let block:PIXI.Sprite;
+            for (let j:number = range.x; j < range.y; j++) {
                 block = this.createBlock(j, i);
                 this.addChild(block);
                 this.blocks.push(block);
@@ -28,14 +28,14 @@ class Shield extends AbstractView {
     }
 
     private createBlock(x:number, y:number):PIXI.Sprite {
-        var block:PIXI.Sprite = Style.getSprite(Style.SHIELD);
+        let block:PIXI.Sprite = AssetManager.getSprite(AssetManager.SHIELD);
         block.position = new PIXI.Point(x * block.width, y * block.height);
         return block;
     }
 
     private handlePlayerBulletMove(event:PlayerBulletEvent):void {
-        var bullet:PlayerBullet = event.getBullet();
-        var block:PIXI.Sprite = this.checkBlockBounds(bullet.getSprite());
+        let bullet:PlayerBullet = event.getBullet();
+        let block:PIXI.Sprite = this.checkBlockBounds(bullet.getSprite());
         if (block) {
             block.visible = false;
             bullet.dispose();
@@ -43,8 +43,8 @@ class Shield extends AbstractView {
     }
 
     private handleEnemyBulletMove(event:EnemyBulletEvent):void {
-        var bullet:EnemyBullet = event.getBullet();
-        var block:PIXI.Sprite = this.checkBlockBounds(bullet.getSprite());
+        let bullet:EnemyBullet = event.getBullet();
+        let block:PIXI.Sprite = this.checkBlockBounds(bullet.getSprite());
         if (block) {
             block.visible = false;
             bullet.dispose();
@@ -52,8 +52,8 @@ class Shield extends AbstractView {
     }
 
     private checkBlockBounds(bullet:PIXI.Sprite):PIXI.Sprite {
-        for (var i:number = 0; i < this.blocks.length; i++) {
-            var block:PIXI.Sprite = this.blocks[i];
+        for (let i:number = 0; i < this.blocks.length; i++) {
+            let block:PIXI.Sprite = this.blocks[i];
             if (block.visible && BoundsUtil.isInBounds(block, bullet)) {
                 return block;
             }

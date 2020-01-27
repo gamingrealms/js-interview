@@ -1,7 +1,5 @@
 class GameView extends AbstractView {
 
-    private model:GameModel;
-
     private background:PIXI.Graphics;
 
     private playerShip:PlayerShip;
@@ -17,8 +15,7 @@ class GameView extends AbstractView {
     private gameName:PIXI.extras.BitmapText;
 
     constructor(model:GameModel) {
-        this.model = model;
-        super();
+        super(model);
     }
 
     public create():void {
@@ -41,26 +38,26 @@ class GameView extends AbstractView {
     }
 
     private createPlayerShip():void {
-        this.playerShip = new PlayerShip();
+        this.playerShip = new PlayerShip(this.model);
         this.addChild(this.playerShip);
     }
 
     private createEnemyShips():void {
         this.enemyShips = [];
-        var ship:EnemyShip;
-        for (var i:number = 0; i < this.model.getNumEnemies(); i++) {
-            ship = new EnemyShip();
+        let ship:EnemyShip;
+        for (let i:number = 0; i < this.model.getNumEnemies(); i++) {
+            ship = new EnemyShip(this.model);
             this.enemyShips.push(ship);
             this.renderer.addChild(ship);
         }
     }
 
     private createShields():void {
-        var shieldPosition:PIXI.Point = new PIXI.Point(17, this.renderer.getGameSize().y - (this.renderer.getGameSize().y / 5));
+        let shieldPosition:PIXI.Point = new PIXI.Point(17, this.renderer.getGameSize().y - (this.renderer.getGameSize().y / 5));
         this.shields = [];
-        var shield:Shield;
-        for (var i:number = 0; i < this.model.getNumShields(); i++) {
-            shield = new Shield();
+        let shield:Shield;
+        for (let i:number = 0; i < this.model.getNumShields(); i++) {
+            shield = new Shield(this.model);
             shield.position = shieldPosition;
             shieldPosition = new PIXI.Point(shieldPosition.x + (this.renderer.getGameSize().x / this.model.getNumShields()), shieldPosition.y);
             this.addChild(shield);

@@ -3,8 +3,8 @@ class PlayerBullet extends AbstractView {
     private sprite:PIXI.Sprite;
     private tween:TweenMax;
 
-    constructor(position:PIXI.Point) {
-        super();
+    constructor(model:GameModel, position:PIXI.Point) {
+        super(model);
         this.sprite.position = position;
     }
 
@@ -20,7 +20,7 @@ class PlayerBullet extends AbstractView {
     }
 
     private createBullet():void {
-        this.sprite = Style.getSprite(Style.PLAYER_BULLET);
+        this.sprite = AssetManager.getSprite(AssetManager.PLAYER_BULLET);
         this.addChild(this.sprite);
     }
 

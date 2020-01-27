@@ -25,7 +25,7 @@ class Loader extends EventDispatcher {
         for (var i:number = 0; i < values.length; i++) {
             filePath = values[i];
             filesToLoad.push(filePath.url);
-            Style.addPath(filePath);
+            AssetManager.addPath(filePath);
         }
         this.loader = new PIXI.loaders.Loader();
         this.loader.add(filesToLoad);
