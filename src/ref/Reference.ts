@@ -27,7 +27,7 @@
 /// <reference path="../ts/com/game/view/style/Font.ts" />
 /// <reference path="../ts/com/game/view/util/AssetManager.ts" />
 /// <reference path="../ts/com/game/view/util/BoundsUtil.ts" />
-/// <reference path="../ts/com/loading/data/ConfigData.ts" />
-/// <reference path="../ts/com/loading/Loader.ts" />
-/// <reference path="../ts/com/loading/request/ConfigRequest.ts" />
+/// <reference path="../ts/com/loader/data/ConfigData.ts" />
+/// <reference path="../ts/com/loader/Loader.ts" />
+/// <reference path="../ts/com/loader/request/ConfigRequest.ts" />
 //grunt-end
