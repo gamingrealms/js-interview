@@ -1,0 +1,59 @@
+.testing {
+    padding: 15px 15px 15px 15px;
+}
+
+.testing-safe {
+    width: 1024px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.test-form {
+    width: 200px;
+    padding-bottom: 5px;
+    display: table;
+    content: " ";
+}
+
+.test-wide-form {
+    width: 800px;
+    padding-bottom: 5px;
+    overflow: auto;
+    display: table;
+    content: " ";
+}
+
+.test-form-alert {
+    width: 365px;
+}
+
+.test-panel
+{
+    width: 370px;
+}
+
+.form-input-half-width {
+    width: 182px;
+}
+
+.form-input-third-width {
+    width: 121px;
+}
+
+.form-input-large {
+    width: 340px;
+}
+
+.deposit-boku-iframe {
+    width: 100%;
+    height: 500px;
+}
+
+.game-iframe {
+    width: 1024px;
+    height: 768px;
+}
+
+.form-control {
+    margin-bottom: 5px;
+}

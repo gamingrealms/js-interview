@@ -11,7 +11,7 @@
         "grunt-contrib-copy": "latest",
         "grunt-contrib-concat": "latest",
         "grunt-contrib-uglify": "latest",
-        "grunt-text-replace": "latest",
-        "grunt-phonegap": "latest"
+        "grunt-contrib-connect": "latest",
+        "grunt-text-replace": "latest"
     }
 }

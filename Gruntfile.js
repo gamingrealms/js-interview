@@ -53,6 +53,18 @@ module.exports = function (grunt) {
                     {expand: true, src: ['package.json'], dest: 'bin/js-interview'}
                 ]
             }
+        },
+
+        connect: {
+            server: {
+                options: {
+                    port: 9001,
+                    hostname: '*',
+                    protocol: 'http',
+                    base: 'www',
+                    keepalive: true
+                }
+            }
         }
     });
 
@@ -60,6 +72,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-text-replace');
 
     grunt.registerTask('default', ['ts', 'uglify', 'copy:build']);
